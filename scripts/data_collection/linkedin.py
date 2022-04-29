@@ -30,10 +30,10 @@ def create_query_string(job_title: str) -> str:
         f"&pageNum=0"
     return query_string
 
-def simulate_infinite_scroll(driver):
+def simulate_infinite_scroll():
     pass
 
-def retrieve_job_posting_url(driver):
+def retrieve_job_posting_urls():
     pass
 
 def main():
