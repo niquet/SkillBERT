@@ -37,7 +37,7 @@ def retrieve_job_posting_urls():
     pass
 
 def main():
-    start_urls = [create_query_string(job_title) for job_title in JOB_TITLES]
+    start_urls = [create_query_string(title) for title in JOB_TITLES]
 
     driver = selenium.webdriver.Chrome()
     driver.maximize_window()
