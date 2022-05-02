@@ -1,4 +1,5 @@
 import sys
+from time import sleep
 sys.path.append("./")
 import threading
 
@@ -45,7 +46,7 @@ def get_start_urls(url: str, parameters: dict) -> list:
     start_urls = []
     keywords = parameters["keywords"]
     for keyword in keywords:
-        start_url = f"{url}?keywords={keyword}"
+        start_url = f"{url}?keywords={keyword}&"
         for parameter in parameters.keys():
             if parameter == "keywords":
                 continue
@@ -59,35 +60,36 @@ def remove_element(driver, by: By, value: str) -> None:
 
 def simulate_infinite_scroll(driver: webdriver):
     viewed_all = WebDriverWait(driver, 10).until(
-        lambda driver: driver.find_element(by=By.CSS_SELECTOR, value=SELECTOR_VIEWED_ALL)
+        lambda driver: driver.find_element(by=By.CSS_SELECTOR, value=SELECTORS["status"]["viewed_all"])
     )
     actions = ActionChains(driver)
     more_results = True
     while more_results:
         last_result = WebDriverWait(driver, 10).until(
-            lambda driver: driver.find_element(by=By.CSS_SELECTOR, value=SELECTOR_LAST_RESULT)
+            lambda driver: driver.find_element(by=By.CSS_SELECTOR, value=SELECTORS["job_results"]["list_items"]["last"])
         )
         actions.move_to_element(last_result).perform()
+        sleep(3)
         load_more = WebDriverWait(driver, 10).until(
-            lambda driver: driver.find_element(by=By.CSS_SELECTOR, value=SELECTOR_LOAD_MORE)
+            lambda driver: driver.find_element(by=By.CSS_SELECTOR, value=SELECTORS["buttons"]["load_more"])
         )
         if load_more.is_displayed():
             load_more.click()
-            print(f"Loaded more results")
         more_results = not viewed_all.is_displayed()
 
 def retrieve_html_data(driver: webdriver):
     viewed_all = WebDriverWait(driver, 10).until(
-        lambda driver: driver.find_element(by=By.CSS_SELECTOR, value=SELECTOR_VIEWED_ALL)
+        lambda driver: driver.find_element(by=By.CSS_SELECTOR, value=SELECTORS["status"]["viewed_all"])
     )
     more_results = True
+    all_results = SELECTORS["job_results"]["list_items"]["all"]
     while more_results:
-        number_results = WebDriverWait(driver, 10).until(
+        current_search_result_count = WebDriverWait(driver, 10).until(
             lambda driver: driver.execute_script(
-                f"return document.querySelectorAll('{SELECTOR_ALL_RESULTS}').length;"
+                f"return document.querySelectorAll('{all_results}').length;"
             )
         )
-        print(f"Currently {number_results} results in total.")
+        print(f"Currently {current_search_result_count} results displayed.")
         more_results = not viewed_all.is_displayed()
 
 def main():
@@ -104,13 +106,19 @@ def main():
     for start_url in start_urls:
 
         driver.get(start_url)
-        remove_element_by_css_selector(driver, SELECTOR_GLOBAL_ALERT)
-        remove_element_by_css_selector(driver, SELECTOR_LOGIN_MODAL)
 
-        total_result_count_text = WebDriverWait(driver, 10).until(
-            lambda driver: driver.find_element(by=By.CSS_SELECTOR, value=SELECTOR_RESULT_COUNT).get_attribute("innerText")
+        remove_element(driver, by=By.CSS_SELECTOR, value=SELECTORS["popups"]["global_alert"])
+        remove_element(driver, by=By.CSS_SELECTOR, value=SELECTORS["popups"]["login_modal"])
+        
+        search_result_count_string = WebDriverWait(driver, 10).until(
+            lambda driver: driver.find_element(by=By.CSS_SELECTOR, value=SELECTORS["status"]["result_count"]).get_attribute("innerText")
         )
-        total_result_count = int(total_result_count_text.strip()[:-8].replace(",", ""))
+        
+        search_result_count = int(
+            search_result_count_string.strip()[10:].replace(",", "")[:-1]
+        )
+        print(f"Found {search_result_count} results.")
+        # simulate_infinite_scroll(driver)
         
         thread_one = threading.Thread(
             target=simulate_infinite_scroll,

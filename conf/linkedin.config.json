@@ -22,7 +22,10 @@
         }
     },
     "selectors": {
-        "global_alert": "#artdeco-global-alert-container",
+        "popups": {
+            "global_alert": "#artdeco-global-alert-container",
+            "login_modal": "body > div.cta-modal.show"
+        },
         "login_modal": "body > div.cta-modal.show",
         "job_results": {
             "list_items": {
@@ -37,7 +40,7 @@
             "load_more": "#main-content > section.two-pane-serp-page__results-list > button"
         },
         "status": {
-            "result_count": "body > div.application-outlet > div.authentication-outlet > div.job-search-ext > div.jobs-search-two-pane__wrapper > div > section.jobs-search__left-rail > div > header > div.jobs-search-results-list__title-heading--pre-orchestra > small",
+            "result_count": "#jserp-filters > ul > li:nth-child(1) > div > div > div > div > div > div:nth-child(4) > label",
             "viewed_all": "#main-content > section.two-pane-serp-page__results-list > div.px-1\\.5.flex.inline-notification.hidden.text-color-signal-positive.see-more-jobs__viewed-all > p"
         }
     },
