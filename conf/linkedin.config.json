@@ -1,0 +1,45 @@
+{
+    "base_url": {
+        "url": "https://www.linkedin.com/jobs/search",
+        "parameters": {
+            "keywords": [
+                "Application Developer",
+                "Computer Programmer",
+                "Data Architect",
+                "Data Engineer",
+                "Data Scientist",
+                "Junior Software Developer",
+                "Machine Learning Engineer",
+                "Mobile Application Developer",
+                "Software Developer",
+                "Software Engineer",
+                "Web Developer"
+            ],
+            "location": "United States of America",
+            "trk": "public_jobs_jobs-search-bar_search-submit",
+            "position": 1,
+            "pageNum": 0
+        }
+    },
+    "selectors": {
+        "global_alert": "#artdeco-global-alert-container",
+        "login_modal": "body > div.cta-modal.show",
+        "job_results": {
+            "list_items": {
+                "all": "#main-content > section.two-pane-serp-page__results-list > ul > li",
+                "last": "#main-content > section.two-pane-serp-page__results-list > ul > li:last-child"
+            },
+            "anchor_tags": {
+                "all": "#main-content > section.two-pane-serp-page__results-list > ul > li > div > a"
+            }
+        },
+        "buttons": {
+            "load_more": "#main-content > section.two-pane-serp-page__results-list > button"
+        },
+        "status": {
+            "result_count": "body > div.application-outlet > div.authentication-outlet > div.job-search-ext > div.jobs-search-two-pane__wrapper > div > section.jobs-search__left-rail > div > header > div.jobs-search-results-list__title-heading--pre-orchestra > small",
+            "viewed_all": "#main-content > section.two-pane-serp-page__results-list > div.px-1\\.5.flex.inline-notification.hidden.text-color-signal-positive.see-more-jobs__viewed-all > p"
+        }
+    },
+    "logging": "debug"
+}

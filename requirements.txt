@@ -1,2 +1,4 @@
 kedro
+python-dotenv
 selenium
+webdriver-manager
